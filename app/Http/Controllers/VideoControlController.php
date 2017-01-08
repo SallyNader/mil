@@ -13,7 +13,9 @@ class VideoControlController extends Controller
      */
     public function index()
     {
-        //
+
+        $videos=Video::all();
+         return view('control.videos.all',compact('videos'));
     }
 
     /**
@@ -23,7 +25,9 @@ class VideoControlController extends Controller
      */
     public function create()
     {
-        //
+        
+
+        return view('control.videos.create');
     }
 
     /**
@@ -34,7 +38,31 @@ class VideoControlController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       
+
+       $this->validate($request,[
+
+'name'=>'required',
+
+
+'youtube'=>'required',
+
+
+        ]);
+
+
+       Video::create([
+
+'vName'=>$request->get('name'),
+'vDisc'=>$request->get('description'),
+'appearInHome'=>$request->get('approved'),
+'youtubeLink'=>$request->get('youtube')
+
+
+
+        ]);
+
+       return redirect('controlvideo');
     }
 
     /**
@@ -45,7 +73,9 @@ class VideoControlController extends Controller
      */
     public function show($id)
     {
-        //
+       $video=Video::find($id);
+
+       return view('control.videos.detail',compact('video'));
     }
 
     /**
@@ -70,7 +100,29 @@ class VideoControlController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+       $this->validate($request,[
+
+'name'=>'required',
+
+
+'youtube'=>'required',
+
+
+        ]);
+
+       $video=Video::find($id);
+
+       $video->vName=$request->get('name');
+
+
+$video->vDisc=$request->get('description');
+
+$video->appearInHome=$request->get('approved');
+
+$video->youtubeLink=$request->get('youtube');
+
+$video->save();
+return redirect('controlvideo');
     }
 
     /**
@@ -81,6 +133,10 @@ class VideoControlController extends Controller
      */
     public function destroy($id)
     {
-        //
+       $video=Video::find($id);
+
+       $video->delete();
+
+       return redirect()->back();
     }
 }
